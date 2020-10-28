@@ -1,7 +1,7 @@
 const dotenv = require("dotenv");
-const CronJob = require("cron").CronJob;
 const axios = require("axios").default;
 const qs = require("qs");
+const cron = require("node-cron");
 const express = require("express");
 
 const utils = require("./utils");
@@ -90,8 +90,9 @@ async function keepAlive() {
 
 (async () => {
   try {
-    const keepAliveCron = new CronJob("*/15 * * * *", keepAlive);
-    const signerCron = new CronJob("0 9,14,15,18 * * * *", main);
+    const timezone = "Europe/Madrid";
+    const keepAliveCron = cron.schedule("*/15 * * * *", keepAlive, { timezone });
+    const signerCron = new cron.schedule("0 9,14,15,18 * * * *", main, { timezone });
     const app = express();
 
     keepAliveCron.start();
