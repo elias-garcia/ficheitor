@@ -92,7 +92,7 @@ async function keepAlive() {
   try {
     const timezone = "Europe/Madrid";
     const keepAliveCron = cron.schedule("*/15 * * * *", keepAlive, { timezone });
-    const signerCron = new cron.schedule("0 9,14,15,18 * * * *", main, { timezone });
+    const signerCron = new cron.schedule("0 9,14,15,18 * * * ", main, { timezone });
     const app = express();
 
     keepAliveCron.start();
