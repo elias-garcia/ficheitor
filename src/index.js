@@ -49,35 +49,39 @@ async function getSigns(accessToken) {
     .then((res) => res.data);
 }
 
-async function postSign(userId, slot) {
+async function postSign(userId, accessToken, slot) {
   const headers = utils.buildAuthorizationHeader(accessToken);
   const body = utils.buildSign(userId, slot);
 
-  return await axios
-    .post(`${process.env.API_URL}/svc/signs/signs`, body, { headers })
-    .then((res) => res.data);
+  return await axios.post(`${process.env.API_URL}/svc/signs/signs`, body, { headers });
 }
 
 async function main() {
   const accessToken = await login(process.env.USERNAME, process.env.PASSWORD);
   const userId = await getUserId(accessToken);
   const workingDay = await getWorkingDay(userId, accessToken);
-  const signs = await getSigns(accessToken);
 
   if (workingDay.IsHoliday) {
     console.log("Holi... day! You don't need to clock in/out today :)");
-
     return;
-  } else {
-    if (signs.length === 4) {
-      console.log("You have already clocked in/out for all of the today slots :D");
-    }
-
-    const nextSlot = signs.length + 1;
-
-    await postSign(userId, nextSlot);
-    console.log(`Clocked in/out successfully for slot number: ${nextSlot}`);
   }
+
+  const signs = await getSigns(accessToken);
+
+  if (signs.length === 4) {
+    console.log("You have already clocked in/out for all of the today slots :D");
+    return;
+  }
+
+  const nextSlot = signs.length + 1;
+  const signResponse = await postSign(userId, accessToken, nextSlot);
+
+  if (signResponse.status !== 201) {
+    console.log(`There was an error clocking in/out for slot number: ${nextSlot}`);
+    return;
+  }
+
+  console.log(`Clocked in/out successfully for slot number: ${nextSlot}`);
 }
 
 async function keepAlive() {
