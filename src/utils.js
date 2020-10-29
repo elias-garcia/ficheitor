@@ -16,7 +16,7 @@ function getSlotHour(slot) {
       return `${todayDate}T09:00:00+01:00`;
     }
     case 2: {
-      return `${todayDate}T014:00:00+01:00`;
+      return `${todayDate}T14:00:00+01:00`;
     }
     case 3: {
       return `${todayDate}T15:00:00+01:00`;
