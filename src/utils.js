@@ -13,16 +13,16 @@ function getSlotHour(slot) {
 
   switch (slot) {
     case 1: {
-      return `${todayDate}T09:00:00+01:00`;
+      return `${todayDate}T${process.env.START_HOUR}:00:00+01:00`;
     }
     case 2: {
-      return `${todayDate}T14:00:00+01:00`;
+      return `${todayDate}T${process.env.BREAK_START_HOUR}:00:00+01:00`;
     }
     case 3: {
-      return `${todayDate}T15:00:00+01:00`;
+      return `${todayDate}T${process.env.BREAK_END_HOUR}:00:00+01:00`;
     }
     case 4: {
-      return `${todayDate}T18:00:00+01:00`;
+      return `${todayDate}T${process.env.END_HOUR}:00:00+01:00`;
     }
   }
 }
